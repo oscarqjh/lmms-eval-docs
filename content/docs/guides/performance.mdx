@@ -1,0 +1,20 @@
+---
+title: Performance
+description: Tips for speed and memory efficiency
+---
+
+## Vectorization
+
+Prefer vectorized operations over Python loops.
+
+## Parallelism
+
+```python
+from yourlib import parallel_map
+
+results = parallel_map(func, items, max_workers=8)
+```
+
+## GPU Acceleration
+
+Enable CUDA support when available.

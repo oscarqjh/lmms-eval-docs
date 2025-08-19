@@ -1,0 +1,22 @@
+---
+title: Data I/O
+description: Load datasets and save results
+---
+
+## Loading Data
+
+```python
+import pandas as pd
+from yourlib import load_dataset
+
+df = load_dataset("csv", path="data/train.csv")
+print(df.head())
+```
+
+## Saving Results
+
+```python
+from yourlib import save_results
+
+save_results(df, path="out/results.parquet")
+```
