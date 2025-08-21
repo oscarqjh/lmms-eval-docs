@@ -1,4 +1,4 @@
-import { createMDX } from 'fumadocs-mdx/next';
+import { createMDX } from "fumadocs-mdx/next";
 
 const withMDX = createMDX();
 
@@ -8,10 +8,19 @@ const config = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'via.placeholder.com',
+        protocol: "https",
+        hostname: "via.placeholder.com",
       },
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: "/", // when user visits /
+        destination: "/docs", // redirect to /docs
+        permanent: true, // 308 permanent redirect
+      },
+    ];
   },
 };
 

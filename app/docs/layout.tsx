@@ -17,17 +17,17 @@ export default function Layout({ children }: { children: ReactNode }) {
           {
             type: "page",
             name: "Welcome",
-            url: "/",
+            url: "/docs/",
           },
           {
             type: "page",
             name: "Getting Started",
-            url: "/getting-started",
+            url: "/docs/getting-started",
           },
           {
             type: "page",
             name: "Components Demo",
-            url: "/components-demo",
+            url: "/docs/components-demo",
           },
           {
             type: "separator",
@@ -39,23 +39,23 @@ export default function Layout({ children }: { children: ReactNode }) {
             index: {
               name: "Examples",
               type: "page",
-              url: "/examples",
+              url: "/docs/examples",
             },
             children: [
               {
                 type: "page",
                 name: "Basic Pipeline",
-                url: "/examples/basic-pipeline",
+                url: "/docs/examples/basic-pipeline",
               },
               {
                 type: "page",
                 name: "Batch Processing",
-                url: "/examples/batch-processing",
+                url: "/docs/examples/batch-processing",
               },
               {
                 type: "page",
                 name: "Notebook",
-                url: "/examples/notebook",
+                url: "/docs/examples/notebook",
               },
             ],
           },
@@ -65,23 +65,23 @@ export default function Layout({ children }: { children: ReactNode }) {
             index: {
               name: "Guides",
               type: "page",
-              url: "/guides",
+              url: "/docs/guides",
             },
             children: [
               {
                 type: "page",
                 name: "Configuration",
-                url: "/guides/configuration",
+                url: "/docs/guides/configuration",
               },
               {
                 type: "page",
                 name: "Data IO",
-                url: "/guides/data-io",
+                url: "/docs/guides/data-io",
               },
               {
                 type: "page",
                 name: "Performance",
-                url: "/guides/performance",
+                url: "/docs/guides/performance",
               },
             ],
           },
@@ -92,12 +92,12 @@ export default function Layout({ children }: { children: ReactNode }) {
           {
             type: "page",
             name: "Contributing",
-            url: "/contributing",
+            url: "/docs/contributing",
           },
           {
             type: "page",
             name: "FAQ",
-            url: "/faq",
+            url: "/docs/faq",
           },
         ],
       }}
