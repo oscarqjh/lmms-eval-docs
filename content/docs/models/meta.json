@@ -1,0 +1,14 @@
+{
+  "title": "Models",
+  "description": "Models documentation",
+  "root": true,
+  "pages": [
+    "---Introduction---",
+    "index",
+    "---Models---",
+    "aero-1-audio",
+    "---Others---",
+    "faq",
+    "!demo"
+  ]
+}

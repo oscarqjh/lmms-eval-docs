@@ -17,8 +17,13 @@ const config = {
     return [
       {
         source: "/", // when user visits /
-        destination: "/docs", // redirect to /docs
+        destination: "/docs/demo", // redirect to /docs
         permanent: true, // 308 permanent redirect
+      },
+      {
+        source: "/docs",
+        destination: "/docs/demo",
+        permanent: true,
       },
     ];
   },

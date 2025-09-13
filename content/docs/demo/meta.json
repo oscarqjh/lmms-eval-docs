@@ -1,0 +1,17 @@
+{
+  "title": "Demo",
+  "description": "Demo documentation",
+  "root": true,
+  "pages": [
+    "---Introduction---",
+    "index",
+    "getting-started",
+    "components-demo",
+    "---Demo lib---",
+    "examples",
+    "guides",
+    "---Others---",
+    "contributing",
+    "faq"
+  ]
+}
