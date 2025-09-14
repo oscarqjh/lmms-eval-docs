@@ -17,12 +17,12 @@ const config = {
     return [
       {
         source: "/", // when user visits /
-        destination: "/docs/demo", // redirect to /docs
+        destination: "/docs/models", // redirect to /docs/models
         permanent: true, // 308 permanent redirect
       },
       {
         source: "/docs",
-        destination: "/docs/demo",
+        destination: "/docs/models",
         permanent: true,
       },
     ];

@@ -10,12 +10,12 @@ export default function Layout({ children }: { children: ReactNode }) {
     <DocsLayout
       sidebar={{
         tabs: [
-          {
-            title: "Demo",
-            description: "Demo documentation",
-            url: "/docs/demo",
-            icon: <Layers color="#9ebbff" className="w-5 h-5" />,
-          },
+          // {
+          //   title: "Demo",
+          //   description: "Demo documentation",
+          //   url: "/docs/demo",
+          //   icon: <Layers color="#9ebbff" className="w-5 h-5" />,
+          // },
           {
             title: "Models",
             description: "Our models",
