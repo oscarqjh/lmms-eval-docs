@@ -1,6 +1,9 @@
 import { createMDX } from "fumadocs-mdx/next";
 
-const withMDX = createMDX();
+const withMDX = createMDX({
+  // Disable image size fetching to prevent timeouts on remote images
+  remarkPlugins: [],
+});
 
 /** @type {import('next').NextConfig} */
 const config = {
@@ -10,6 +13,10 @@ const config = {
       {
         protocol: "https",
         hostname: "via.placeholder.com",
+      },
+      {
+        protocol: "https",
+        hostname: "i.postimg.cc",
       },
     ],
   },
