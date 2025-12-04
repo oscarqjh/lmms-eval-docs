@@ -1,6 +1,6 @@
-@import 'tailwindcss';
-@import 'fumadocs-ui/css/neutral.css';
-@import 'fumadocs-ui/css/preset.css';
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
 
 /* Align the sidebar collapse toggle flush to the left on desktop */
 @media (min-width: 1280px) {
@@ -11,4 +11,10 @@
     left: 10 !important;
     right: auto !important;
   }
+}
+
+/* Prevent table cells from wrapping text */
+.prose table td,
+.prose table th {
+  white-space: nowrap;
 }
