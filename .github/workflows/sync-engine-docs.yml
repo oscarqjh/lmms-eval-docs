@@ -1,5 +1,8 @@
 name: Sync lmms-engine Documentation
 
+permissions:
+  contents: write
+
 on:
   # Run every 6 hours
   schedule:
