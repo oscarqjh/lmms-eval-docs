@@ -1,7 +1,7 @@
 import fs from "fs/promises";
 import path from "path";
 
-const GITHUB_REPO = "oscarqjh/lmms-eval";
+const GITHUB_REPO = "EvolvingLMMs-Lab/lmms-eval";
 const DOCS_PATH = "docs";
 const TARGET_DIR = path.join(process.cwd(), "content", "docs", "lmms-eval");
 
