@@ -4,7 +4,11 @@
  * Run with: pnpm run sync-docs
  */
 
+import { config } from "dotenv";
 import { syncLmmsEvalDocs } from "../lib/sync-lmms-eval-docs";
+
+// Load environment variables from .env.local
+config({ path: ".env.local" });
 
 async function main() {
   const token = process.env.GITHUB_TOKEN;

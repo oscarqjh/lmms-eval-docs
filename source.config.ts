@@ -27,6 +27,17 @@ export const lmmsEvalDocs = defineDocs({
   },
 });
 
+// lmms-engine documentation from external GitHub repo
+export const lmmsEngineDocs = defineDocs({
+  dir: "content/docs/lmms-engine",
+  docs: {
+    schema: frontmatterSchema,
+  },
+  meta: {
+    schema: metaSchema,
+  },
+});
+
 export default defineConfig({
   mdxOptions: {
     // MDX options

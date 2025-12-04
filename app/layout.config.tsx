@@ -1,4 +1,5 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
+import { BookIcon } from "lucide-react";
 
 /**
  * Shared layout configurations
@@ -24,6 +25,14 @@ export const baseOptions: BaseLayoutProps = {
     ),
   },
   // see https://fumadocs.dev/docs/ui/navigation/links
-  links: [],
+  links: [
+    {
+      icon: <BookIcon />,
+      text: "Blog",
+      url: "https://www.lmms-lab.com/",
+      // secondary items will be displayed differently on navbar
+      secondary: false,
+    },
+  ],
   githubUrl: "https://github.com/EvolvingLMMs-Lab/lmms-eval",
 };

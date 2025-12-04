@@ -7,9 +7,11 @@
     "dev": "next dev --turbo",
     "start": "next start",
     "sync-docs": "tsx scripts/sync-docs.ts",
+    "sync-engine-docs": "tsx scripts/sync-engine-docs.ts",
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
+    "dotenv": "^17.2.3",
     "fumadocs-core": "15.6.12",
     "fumadocs-mdx": "11.7.5",
     "fumadocs-ui": "15.6.12",

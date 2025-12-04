@@ -1,4 +1,4 @@
-import { docs, lmmsEvalDocs } from "@/.source";
+import { docs, lmmsEvalDocs, lmmsEngineDocs } from "@/.source";
 import { loader } from "fumadocs-core/source";
 import { icons } from "lucide-react";
 import { createElement } from "react";
@@ -21,6 +21,18 @@ export const source = loader({
 export const lmmsEvalSource = loader({
   baseUrl: "/docs/lmms-eval",
   source: lmmsEvalDocs.toFumadocsSource(),
+  icon(icon) {
+    if (!icon) {
+      return;
+    }
+    if (icon in icons) return createElement(icons[icon as keyof typeof icons]);
+  },
+});
+
+// lmms-engine documentation source
+export const lmmsEngineSource = loader({
+  baseUrl: "/docs/lmms-engine",
+  source: lmmsEngineDocs.toFumadocsSource(),
   icon(icon) {
     if (!icon) {
       return;
