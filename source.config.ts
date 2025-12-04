@@ -47,7 +47,13 @@ export default defineConfig({
         if (Array.isArray(plugin)) {
           return plugin[0]?.name !== "remarkImage";
         }
-        return plugin?.name !== "remarkImage";
+        // Type guard: check if plugin is an object with a name property
+        return !(
+          typeof plugin === "object" &&
+          plugin !== null &&
+          "name" in plugin &&
+          plugin.name === "remarkImage"
+        );
       });
     },
   },
