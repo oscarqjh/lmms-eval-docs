@@ -114,35 +114,77 @@ function escapeHtmlTags(content: string): string {
       }
       if (inCodeBlock) return line;
 
+      // First, escape < followed by numbers (e.g., p<0.01) which MDX wrongly parses as JSX
+      let escapedLine = line.replace(/<(\d)/g, "\\<$1");
+
       // Escape <word> patterns but preserve real HTML tags
-      return line.replace(/<([a-z_][a-z0-9_-]*)>/gi, (match, tagName) => {
-        const htmlTags = [
-          "div",
-          "span",
-          "p",
-          "a",
-          "img",
-          "ul",
-          "ol",
-          "li",
-          "table",
-          "tr",
-          "td",
-          "th",
-          "br",
-          "hr",
-        ];
-        // Convert self-closing tags to proper format first
-        if (htmlTags.includes(tagName.toLowerCase())) {
-          // Self-closing tags need />
-          if (["br", "hr", "img"].includes(tagName.toLowerCase())) {
-            return `<${tagName} />`;
+      escapedLine = escapedLine.replace(
+        /<([a-z_][a-z0-9_-]*)>/gi,
+        (match, tagName) => {
+          const htmlTags = [
+            "div",
+            "span",
+            "p",
+            "a",
+            "img",
+            "ul",
+            "ol",
+            "li",
+            "table",
+            "tr",
+            "td",
+            "th",
+            "br",
+            "hr",
+          ];
+          // Convert self-closing tags to proper format first
+          if (htmlTags.includes(tagName.toLowerCase())) {
+            // Self-closing tags need />
+            if (["br", "hr", "img"].includes(tagName.toLowerCase())) {
+              return `<${tagName} />`;
+            }
+            return match;
           }
-          return match;
+          // Escape non-HTML placeholders
+          return `\\<${tagName}\\>`;
         }
-        // Escape non-HTML placeholders
-        return `\\<${tagName}\\>`;
-      });
+      );
+
+      return escapedLine;
+    })
+    .join("\n");
+}
+
+/**
+ * Escape LaTeX math formulas to prevent MDX parsing errors
+ * Converts $$...$$ and $...$ to code blocks
+ */
+function escapeMathFormulas(content: string): string {
+  const lines = content.split("\n");
+  let inCodeBlock = false;
+
+  return lines
+    .map((line) => {
+      if (line.trim().startsWith("```")) {
+        inCodeBlock = !inCodeBlock;
+        return line;
+      }
+      if (inCodeBlock) return line;
+
+      // Escape block math ($$...$$) - convert to code block
+      if (line.trim().startsWith("$$") && line.trim().endsWith("$$")) {
+        // Single line block math
+        const mathContent = line.trim().slice(2, -2);
+        return "```\n" + mathContent + "\n```";
+      }
+
+      // Handle multi-line block math start/end
+      if (line.trim() === "$$") {
+        return "```math";
+      }
+
+      // Escape inline math ($...$) - wrap in backticks
+      return line.replace(/\$([^$\n]+)\$/g, "`$1`");
     })
     .join("\n");
 }
@@ -162,8 +204,9 @@ function addImageDimensions(content: string): string {
  * Convert markdown to MDX with frontmatter
  */
 function convertToMDX(content: string, metadata: DocMetadata): string {
-  // Escape HTML-like tags and add image dimensions
+  // Escape HTML-like tags, math formulas, and add image dimensions
   let processedContent = escapeHtmlTags(content);
+  processedContent = escapeMathFormulas(processedContent);
   processedContent = addImageDimensions(processedContent);
   const frontmatter = `---
 title: ${escapeYamlValue(metadata.title)}
