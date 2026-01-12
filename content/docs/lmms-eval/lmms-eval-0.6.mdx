@@ -250,11 +250,13 @@ Current leaderboards rank models by mean accuracy without uncertainty quantifica
 
 For binary metrics (pass/fail), SE simplifies to:
 
-$$SE = \sqrt{\frac{p(1-p)}{n}}$$
+```
+SE = \sqrt{\frac{p(1-p)}{n}}
+```
 
-where $p$ = accuracy, $n$ = number of questions.
+where `p` = accuracy, `n` = number of questions.
 
-**Key insight**: SE ∝ $1/\sqrt{n}$. To halve uncertainty -> 4× more questions.
+**Key insight**: SE ∝ `1/\sqrt{n}`. To halve uncertainty -> 4× more questions.
 
 Output format: `score ± 1.96 × SE` (95% CI)
 
@@ -275,7 +277,7 @@ Clustered SE can be 3× larger than naive estimates.
 
 **Problem**: Checking if confidence intervals overlap is low-power.
 
-**Solution**: Paired test — compute per-question difference $d_i = score_A - score_B$, then test if mean($d$) ≠ 0.
+**Solution**: Paired test — compute per-question difference `d_i = score_A - score_B`, then test if mean(`d`) ≠ 0.
 
 **Why**: Removes question difficulty variance (dominant noise), isolates model difference signal.
 
@@ -287,7 +289,7 @@ A practical application of paired comparison: **anchor evaluations to a standard
 |----------|--------|------------|
 | Absolute score | "Our model: 78.3%" | Meaningless without context |
 | Leaderboard rank | "#3 on MMMU" | Rank doesn't quantify gap |
-| **Paired difference** | "+2.1% vs Gemini 3.0 Pro (p<0.01)" | Statistically grounded claim |
+| **Paired difference** | "+2.1% vs Gemini 3.0 Pro (p\<0.01)" | Statistically grounded claim |
 
 **Benefits**:
 - **Reproducible claims**: "We beat baseline X by Y%" is verifiable
@@ -308,7 +310,7 @@ results = paired_comparison(
 
 **Purpose**: Minimum sample size to detect a given effect (e.g., 2% improvement).
 
-**Rule of thumb**: Reliable benchmarks need $n > 1000$ questions.
+**Rule of thumb**: Reliable benchmarks need `n > 1000` questions.
 
 ### 2.5 Model Stability Measurement
 
@@ -324,7 +326,9 @@ Two models with 80% accuracy can behave differently:
 
 #### Law of Total Variance
 
-$$Var(Score) = \underbrace{Var_{within}}_{\text{Model instability}} + \underbrace{Var_{between}}_{\text{Question difficulty}}$$
+```
+Var(Score) = \underbrace{Var_{within}}_{\text{Model instability}} + \underbrace{Var_{between}}_{\text{Question difficulty}}
+```
 
 The first term measures **model stability** — lower is better.
 
@@ -370,7 +374,7 @@ Static image QA benchmarks are saturating. Building frontier multimodal systems 
 
 | Capability | Challenge | Current Gap |
 |------------|-----------|-------------|
-| Long video understanding | 10min+ videos, 1000+ frames | Most benchmarks use <128 frames |
+| Long video understanding | 10min+ videos, 1000+ frames | Most benchmarks use \<128 frames |
 | High temporal resolution | Event detection at 30fps | Sparse sampling loses fine-grained actions |
 | Spatial reasoning | 3D world understanding | 2D perception ≠ physical grounding |
 | Agentic interaction (streaming input) | Multi-step task execution | Static QA can't measure planning/tool use |
