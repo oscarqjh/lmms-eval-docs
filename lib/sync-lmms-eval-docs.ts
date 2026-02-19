@@ -35,7 +35,7 @@ async function fetchGitHubFiles(token?: string): Promise<GitHubFile[]> {
 
   if (!response.ok) {
     throw new Error(
-      `GitHub API error: ${response.status} ${response.statusText}`
+      `GitHub API error: ${response.status} ${response.statusText}`,
     );
   }
 
@@ -114,8 +114,11 @@ function escapeHtmlTags(content: string): string {
       }
       if (inCodeBlock) return line;
 
+      // Convert angle-bracket URLs to proper markdown links (e.g., <https://example.com> -> [https://example.com](https://example.com))
+      let escapedLine = line.replace(/<(https?:\/\/[^>]+)>/g, "[$1]($1)");
+
       // First, escape < followed by numbers (e.g., p<0.01) which MDX wrongly parses as JSX
-      let escapedLine = line.replace(/<(\d)/g, "\\<$1");
+      escapedLine = escapedLine.replace(/<(\d)/g, "\\<$1");
 
       // Escape <word> patterns but preserve real HTML tags
       escapedLine = escapedLine.replace(
@@ -147,7 +150,7 @@ function escapeHtmlTags(content: string): string {
           }
           // Escape non-HTML placeholders
           return `\\<${tagName}\\>`;
-        }
+        },
       );
 
       return escapedLine;
@@ -196,7 +199,7 @@ function addImageDimensions(content: string): string {
   // Convert markdown images to HTML img tags with width and height
   return content.replace(
     /!\[([^\]]*)\]\(([^)]+)\)/g,
-    '<img src="$2" alt="$1" width="800" height="600" />'
+    '<img src="$2" alt="$1" width="800" height="600" />',
   );
 }
 
@@ -247,7 +250,7 @@ export async function syncLmmsEvalDocs(token?: string): Promise<void> {
     // Fetch file list from GitHub
     const files = await fetchGitHubFiles(token);
     const mdFiles = files.filter(
-      (file) => file.type === "file" && file.name.match(/\.mdx?$/)
+      (file) => file.type === "file" && file.name.match(/\.mdx?$/),
     );
 
     console.log(`📄 Found ${mdFiles.length} markdown files`);
