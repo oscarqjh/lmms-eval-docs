@@ -24,12 +24,12 @@ const config = {
     return [
       {
         source: "/", // when user visits /
-        destination: "/docs/models", // redirect to /docs/models
+        destination: "/docs/lmms-eval", // redirect to /docs/lmms-eval
         permanent: true, // 308 permanent redirect
       },
       {
         source: "/docs",
-        destination: "/docs/models",
+        destination: "/docs/lmms-eval",
         permanent: true,
       },
     ];
