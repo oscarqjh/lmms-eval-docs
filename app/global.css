@@ -2,9 +2,163 @@
 @import "fumadocs-ui/css/neutral.css";
 @import "fumadocs-ui/css/preset.css";
 
-/* Align the sidebar collapse toggle flush to the left on desktop */
+/* =============================================================================
+   LMMS-Lab Design System — Brutalist Documentation Theme
+   =============================================================================
+   Palette: Deep Teal #03639a + Warm Cream #fed7aa
+   Source: randoma11y.com with APCA accessibility algorithm
+   WCAG 2.1 Ratio: 4.77:1 (AA), APCA: Lc 60+
+   Principles: Flat, honest, high contrast, no rounded corners, no shadows
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   Light Mode Theme Tokens
+   ----------------------------------------------------------------------------- */
+@theme {
+  --color-fd-background: #fef7ed;
+  --color-fd-foreground: #1a1a1a;
+  --color-fd-muted: #faecd8;
+  --color-fd-muted-foreground: #4a4a4a;
+  --color-fd-popover: #fef7ed;
+  --color-fd-popover-foreground: #1a1a1a;
+  --color-fd-card: #fdf0de;
+  --color-fd-card-foreground: #1a1a1a;
+  --color-fd-border: #c9d5df;
+  --color-fd-primary: #03639a;
+  --color-fd-primary-foreground: #fef7ed;
+  --color-fd-secondary: #f0e4d1;
+  --color-fd-secondary-foreground: #1a1a1a;
+  --color-fd-accent: #e8dccb;
+  --color-fd-accent-foreground: #03639a;
+  --color-fd-ring: #03639a;
+}
+
+/* -----------------------------------------------------------------------------
+   Dark Mode Theme Tokens
+   ----------------------------------------------------------------------------- */
+.dark {
+  --color-fd-background: #03639a;
+  --color-fd-foreground: #fed7aa;
+  --color-fd-muted: #045a8a;
+  --color-fd-muted-foreground: rgba(254, 215, 170, 0.7);
+  --color-fd-popover: #04567e;
+  --color-fd-popover-foreground: #fed7aa;
+  --color-fd-card: #045a8a;
+  --color-fd-card-foreground: #fed7aa;
+  --color-fd-border: rgba(254, 215, 170, 0.15);
+  --color-fd-primary: #fed7aa;
+  --color-fd-primary-foreground: #03639a;
+  --color-fd-secondary: #04567e;
+  --color-fd-secondary-foreground: #fed7aa;
+  --color-fd-accent: rgba(254, 215, 170, 0.1);
+  --color-fd-accent-foreground: #fed7aa;
+  --color-fd-ring: #fed7aa;
+}
+
+.dark #nd-sidebar {
+  --color-fd-muted: #045080;
+  --color-fd-secondary: #04567e;
+  --color-fd-muted-foreground: rgba(254, 215, 170, 0.8);
+}
+
+/* -----------------------------------------------------------------------------
+   Global Brutalist Overrides
+   ----------------------------------------------------------------------------- */
+
+/* No rounded corners — sharp edges only */
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
+}
+
+/* System font stack — zero load time, native feel */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+code,
+pre,
+kbd,
+samp,
+[data-rehype-pretty-code-figure] {
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, monospace;
+}
+
+/* Focus styles — high visibility, flat */
+:focus-visible {
+  outline: 2px solid var(--color-fd-ring);
+  outline-offset: 2px;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Navigation — Mobile navbar (#nd-subnav)
+   Deep Teal header matching main site
+   ----------------------------------------------------------------------------- */
+#nd-subnav {
+  background-color: #03639a !important;
+  color: #fed7aa !important;
+  border-bottom: 2px solid rgba(254, 215, 170, 0.2) !important;
+  backdrop-filter: none !important;
+}
+
+#nd-subnav a,
+#nd-subnav button {
+  color: #fed7aa !important;
+}
+
+#nd-subnav a:hover,
+#nd-subnav button:hover {
+  color: #fff !important;
+}
+
+/* Mobile TOC header */
+#nd-tocnav {
+  backdrop-filter: none !important;
+  border-bottom: 2px solid var(--color-fd-border) !important;
+}
+
+/* -----------------------------------------------------------------------------
+   Sidebar
+   Flat design with teal accents
+   ----------------------------------------------------------------------------- */
+#nd-sidebar {
+  border-right: 2px solid var(--color-fd-border) !important;
+}
+
+/* Sidebar active link indicator — left border, no rounded bg */
+#nd-sidebar a[data-active="true"] {
+  box-shadow: inset 3px 0 0 0 var(--color-fd-primary);
+  font-weight: 600;
+}
+
+/* Sidebar tab items — flat, bold borders */
+#nd-sidebar [role="tablist"] a,
+#nd-sidebar [role="tab"] {
+  border: 2px solid var(--color-fd-border);
+}
+
+/* Sidebar scroll container — hide scrollbar */
+#nd-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+#nd-sidebar::-webkit-scrollbar-thumb {
+  background: var(--color-fd-border);
+}
+
+/* Sidebar collapse toggle */
 @media (min-width: 1280px) {
-  /* The collapsible control is a fixed div rendered inside #nd-docs-layout */
   #nd-docs-layout > div.fixed {
     inset-inline-start: var(--fd-sidebar-margin, 0px) !important;
     inset-inline-end: auto !important;
@@ -13,8 +167,302 @@
   }
 }
 
-/* Prevent table cells from wrapping text */
+/* -----------------------------------------------------------------------------
+   Content Area — Prose Typography
+   ----------------------------------------------------------------------------- */
+
+/* Headings — teal, tight tracking */
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4 {
+  color: var(--color-fd-primary);
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+
+.prose h1 {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--color-fd-border);
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+/* Body text — generous line height for readability */
+.prose p {
+  line-height: 1.8;
+}
+
+/* Links — teal with underline, hover opacity */
+.prose a:not([data-card]) {
+  color: var(--color-fd-primary);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: opacity 150ms ease;
+}
+
+.prose a:not([data-card]):hover {
+  opacity: 0.8;
+}
+
+/* Inline code — flat teal tint */
+.prose :not(pre) > code {
+  background: rgba(3, 99, 154, 0.08);
+  color: var(--color-fd-primary);
+  padding: 0.15em 0.4em;
+  font-size: 0.875em;
+  font-weight: 500;
+  box-shadow: 0 0 0 1px rgba(3, 99, 154, 0.15);
+}
+
+.dark .prose :not(pre) > code {
+  background: rgba(254, 215, 170, 0.08);
+  color: var(--color-fd-primary);
+  box-shadow: 0 0 0 1px rgba(254, 215, 170, 0.15);
+}
+
+/* Blockquotes — left border accent */
+.prose blockquote {
+  border-left: 4px solid var(--color-fd-primary);
+  background: transparent;
+  padding: 0.5rem 1rem;
+  font-style: normal;
+  color: var(--color-fd-muted-foreground);
+}
+
+/* Lists — teal markers */
+.prose ul > li::marker,
+.prose ol > li::marker {
+  color: var(--color-fd-primary);
+}
+
+/* Horizontal rules */
+.prose hr {
+  border-color: var(--color-fd-border);
+  border-width: 2px;
+}
+
+/* Strong text */
+.prose strong {
+  font-weight: 700;
+  color: var(--color-fd-foreground);
+}
+
+/* -----------------------------------------------------------------------------
+   Code Blocks — Flat, no rounded corners, solid borders
+   ----------------------------------------------------------------------------- */
+pre {
+  box-shadow: 0 0 0 2px var(--color-fd-border) !important;
+  border: none !important;
+}
+
+[data-rehype-pretty-code-figure] pre {
+  background: var(--color-fd-card) !important;
+}
+
+.dark [data-rehype-pretty-code-figure] pre {
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Code block title bar */
+[data-rehype-pretty-code-figure] [data-rehype-pretty-code-title] {
+  box-shadow: 0 0 0 2px var(--color-fd-border);
+  background: var(--color-fd-secondary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 1rem;
+}
+
+/* Line highlighting */
+[data-rehype-pretty-code-figure] [data-highlighted-line] {
+  background: rgba(3, 99, 154, 0.08);
+}
+
+.dark [data-rehype-pretty-code-figure] [data-highlighted-line] {
+  background: rgba(254, 215, 170, 0.08);
+}
+
+/* Line numbers */
+[data-rehype-pretty-code-figure] code[data-line-numbers] > [data-line]::before {
+  color: var(--color-fd-muted-foreground);
+  font-size: 0.75rem;
+}
+
+/* -----------------------------------------------------------------------------
+   Tables — Sharp borders, high contrast
+   ----------------------------------------------------------------------------- */
+.prose table {
+  box-shadow: 0 0 0 2px var(--color-fd-border);
+}
+
 .prose table td,
 .prose table th {
   white-space: nowrap;
+  border: 1px solid var(--color-fd-border);
+  padding: 0.5rem 0.75rem;
+}
+
+.prose table th {
+  background: var(--color-fd-secondary);
+  font-weight: 700;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.prose table tr:nth-child(even) {
+  background: rgba(3, 99, 154, 0.03);
+}
+
+.dark .prose table tr:nth-child(even) {
+  background: rgba(254, 215, 170, 0.03);
+}
+
+/* -----------------------------------------------------------------------------
+   Cards & Callouts — Flat box-shadow borders
+   ----------------------------------------------------------------------------- */
+
+/* Fumadocs callout/admonition styling */
+[data-callout] {
+  box-shadow: 0 0 0 2px currentColor !important;
+  border: none !important;
+}
+
+/* Card components — lift on hover, flat border */
+.fd-card,
+[data-card] {
+  box-shadow: 0 0 0 2px var(--color-fd-border);
+  transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 250ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fd-card:hover,
+[data-card]:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 0 2px var(--color-fd-primary);
+}
+
+/* Steps — square step indicators */
+@utility fd-step {
+  &:before {
+    border-radius: 0 !important;
+    box-shadow: 0 0 0 2px currentColor;
+    background-color: var(--color-fd-secondary);
+    color: var(--color-fd-secondary-foreground);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   Search Dialog — Flat, brutalist
+   ----------------------------------------------------------------------------- */
+[data-search-full] {
+  box-shadow: 0 0 0 2px var(--color-fd-border) !important;
+  border: none !important;
+}
+
+/* Search dialog overlay */
+[role="dialog"] {
+  box-shadow: 0 0 0 2px var(--color-fd-border) !important;
+}
+
+/* Search input */
+[role="dialog"] input[type="text"],
+[role="dialog"] input[type="search"] {
+  border-bottom: 2px solid var(--color-fd-border) !important;
+}
+
+/* Search result items */
+[role="dialog"] [data-active="true"] {
+  background: var(--color-fd-accent);
+}
+
+/* -----------------------------------------------------------------------------
+   Badges & Labels — Uppercase, wide letter-spacing
+   ----------------------------------------------------------------------------- */
+[data-badge],
+.fd-badge {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 0.375em 0.75em;
+  background: var(--color-fd-primary);
+  color: var(--color-fd-primary-foreground);
+}
+
+/* -----------------------------------------------------------------------------
+   Breadcrumbs — Flat, subtle
+   ----------------------------------------------------------------------------- */
+nav[aria-label="breadcrumb"] {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-fd-muted-foreground);
+}
+
+nav[aria-label="breadcrumb"] a {
+  color: var(--color-fd-primary);
+}
+
+/* -----------------------------------------------------------------------------
+   TOC (Table of Contents) — Clean, teal active indicator
+   ----------------------------------------------------------------------------- */
+[data-toc-popover] a[data-active="true"] {
+  border-left: 3px solid var(--color-fd-primary);
+  font-weight: 600;
+}
+
+/* -----------------------------------------------------------------------------
+   Images — Flat border treatment
+   ----------------------------------------------------------------------------- */
+.prose img {
+  box-shadow: 0 0 0 2px var(--color-fd-border);
+}
+
+/* -----------------------------------------------------------------------------
+   Selection — On-brand highlight
+   ----------------------------------------------------------------------------- */
+::selection {
+  background: rgba(3, 99, 154, 0.25);
+  color: inherit;
+}
+
+.dark ::selection {
+  background: rgba(254, 215, 170, 0.25);
+  color: inherit;
+}
+
+/* -----------------------------------------------------------------------------
+   Scrollbar — Minimal, on-brand
+   ----------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-fd-border);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-fd-muted-foreground);
 }
