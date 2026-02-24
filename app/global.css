@@ -356,6 +356,14 @@ pre {
   box-shadow: 0 0 0 2px var(--color-fd-primary);
 }
 
+/* Remove border from heading anchor links */
+.prose h1 a[data-card],
+.prose h2 a[data-card],
+.prose h3 a[data-card],
+.prose h4 a[data-card] {
+  box-shadow: none;
+}
+
 /* Steps — square step indicators */
 @utility fd-step {
   &:before {
