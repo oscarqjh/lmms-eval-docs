@@ -147,12 +147,11 @@ samp,
   font-weight: 600;
 }
 
-/* Sidebar tab icon — center icon in its container on mobile */
-#nd-sidebar [data-state] > div:first-child,
-#nd-sidebar [data-radix-popper-content-wrapper] a > div:first-child {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* Sidebar tab icon — center icon in its container (dropdown items) */
+[data-radix-popper-content-wrapper] a > div:first-child {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 /* Sidebar tab items — flat, bold borders */

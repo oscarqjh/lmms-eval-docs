@@ -19,9 +19,9 @@ function buildSidebarTabs(versionList: VersionEntry[]) {
     url: `/docs/${v.slug}`,
     icon:
       v.slug === "latest" ? (
-        <BookOpen className="w-5 h-5" />
+        <span className="flex items-center justify-center w-full h-full"><BookOpen className="w-5 h-5" /></span>
       ) : (
-        <Tag className="w-5 h-5" />
+        <span className="flex items-center justify-center w-full h-full"><Tag className="w-5 h-5" /></span>
       ),
   }));
 }
