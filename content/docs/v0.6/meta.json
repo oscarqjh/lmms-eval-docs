@@ -1,0 +1,22 @@
+{
+  "title": "v0.6",
+  "description": "Evaluation framework documentation",
+  "root": true,
+  "pages": [
+    "---Getting Started---",
+    "index",
+    "quickstart",
+    "---Guides---",
+    "model_guide",
+    "task_guide",
+    "run_examples",
+    "commands",
+    "caching",
+    "throughput_metrics",
+    "---References---",
+    "current_tasks",
+    "---Roadmap---",
+    "02_business_marketing_roadmap",
+    "changelogs"
+  ]
+}

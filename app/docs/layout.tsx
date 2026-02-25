@@ -2,32 +2,38 @@ import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import type { ReactNode } from "react";
 import { baseOptions } from "@/app/layout.config";
 import { source } from "@/lib/source";
-import { Boxes, ChartColumnIcon, Wrench } from "lucide-react";
+import { BookOpen, Tag } from "lucide-react";
+import { CustomFolder } from "@/components/changelog-folder";
+import versions from "@/versions.json";
+
+interface VersionEntry {
+  slug: string;
+  ref: string;
+  label: string;
+}
+
+function buildSidebarTabs(versionList: VersionEntry[]) {
+  return versionList.map((v) => ({
+    title: v.label,
+    description: v.slug === "latest" ? "Main branch" : `Release ${v.label}`,
+    url: `/docs/${v.slug}`,
+    icon:
+      v.slug === "latest" ? (
+        <BookOpen className="w-5 h-5" />
+      ) : (
+        <Tag className="w-5 h-5" />
+      ),
+  }));
+}
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <DocsLayout
       sidebar={{
-        tabs: [
-          // {
-          //   title: "Models",
-          //   description: "Our models",
-          //   url: "/docs/models",
-          //   icon: <Boxes color="#ad6dd0" className="w-5 h-5" />,
-          // },
-          {
-            title: "lmms-eval",
-            description: "Evaluation framework",
-            url: "/docs/lmms-eval",
-            icon: <ChartColumnIcon color="#4aafdeff" className="w-5 h-5" />,
-          },
-          // {
-          //   title: "lmms-engine",
-          //   description: "Training framework",
-          //   url: "/docs/lmms-engine",
-          //   icon: <Wrench color="#f59e0b" className="w-5 h-5" />,
-          // },
-        ],
+        tabs: buildSidebarTabs(versions as VersionEntry[]),
+        components: {
+          Folder: CustomFolder,
+        },
       }}
       tree={source.pageTree}
       {...baseOptions}

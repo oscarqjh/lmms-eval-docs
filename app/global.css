@@ -136,6 +136,11 @@ samp,
   border-right: 2px solid var(--color-fd-border) !important;
 }
 
+/* Sidebar separator text — bolder weight */
+#nd-sidebar p:not(:empty) {
+  font-weight: 700;
+}
+
 /* Sidebar active link indicator — left border, no rounded bg */
 #nd-sidebar a[data-active="true"] {
   box-shadow: inset 3px 0 0 0 var(--color-fd-primary);
@@ -146,6 +151,37 @@ samp,
 #nd-sidebar [role="tablist"] a,
 #nd-sidebar [role="tab"] {
   border: 2px solid var(--color-fd-border);
+}
+
+/* Version tabs dropdown — cap at half viewport, scroll on overflow */
+[data-radix-popper-content-wrapper] > [data-side] {
+  max-height: 50vh !important;
+  overflow-y: auto !important;
+}
+
+/* Changelog expand toggle — horizontal rule with centered arrow */
+.changelog-expand-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 70%;
+  margin: 0.25rem auto 0;
+  font-size: 0.625rem;
+  color: var(--color-fd-muted-foreground);
+  cursor: pointer;
+  background: none;
+  border: none;
+  transition: color 150ms ease;
+}
+
+.changelog-expand-toggle:hover {
+  color: var(--color-fd-primary);
+}
+
+.changelog-expand-line {
+  flex: 1;
+  height: 1px;
+  background: var(--color-fd-border);
 }
 
 /* Sidebar scroll container — hide scrollbar */

@@ -7,7 +7,6 @@
     "dev": "next dev --turbo",
     "start": "next start",
     "sync-docs": "tsx scripts/sync-docs.ts",
-    "sync-engine-docs": "tsx scripts/sync-engine-docs.ts",
     "postinstall": "fumadocs-mdx"
   },
   "dependencies": {
@@ -18,7 +17,8 @@
     "lucide-react": "^0.544.0",
     "next": "15.4.10",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "react-icons": "^5.5.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.12",

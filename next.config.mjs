@@ -1,7 +1,6 @@
 import { createMDX } from "fumadocs-mdx/next";
 
 const withMDX = createMDX({
-  // Disable image size fetching to prevent timeouts on remote images
   remarkPlugins: [],
 });
 
@@ -23,13 +22,19 @@ const config = {
   async redirects() {
     return [
       {
-        source: "/", // when user visits /
-        destination: "/docs/lmms-eval", // redirect to /docs/lmms-eval
-        permanent: true, // 308 permanent redirect
+        source: "/",
+        destination: "/docs/latest",
+        permanent: true,
       },
       {
         source: "/docs",
-        destination: "/docs/lmms-eval",
+        destination: "/docs/latest",
+        permanent: true,
+      },
+      // Redirect old lmms-eval paths to versioned latest
+      {
+        source: "/docs/lmms-eval/:path*",
+        destination: "/docs/latest/:path*",
         permanent: true,
       },
     ];
