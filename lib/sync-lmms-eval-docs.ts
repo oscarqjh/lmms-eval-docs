@@ -381,7 +381,7 @@ interface SectionConfig {
 const SECTIONS: SectionConfig[] = [
   {
     name: "Getting Started",
-    pages: ["introduction", "quickstart", "commands", "run_examples"],
+    pages: ["index", "quickstart", "commands", "run_examples"],
   },
 ];
 
@@ -577,7 +577,7 @@ async function syncDocsForVersion(
 
     const slug =
       file.name.toLowerCase() === "readme.md"
-        ? "introduction"
+        ? "index"
         : file.name.replace(/\.mdx?$/, "").toLowerCase();
     const title = extractTitle(file.name);
     const description = "";
@@ -627,7 +627,7 @@ async function syncDocsForVersion(
 
       const slug =
         file.name.toLowerCase() === "readme.md"
-          ? "introduction"
+          ? "index"
           : file.name.replace(/\.mdx?$/, "").toLowerCase();
       const title = extractTitle(file.name);
       const description = "";
