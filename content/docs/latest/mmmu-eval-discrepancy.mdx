@@ -46,7 +46,7 @@ This system prompt is injected as the first message in every conversation:
 
 ```python
 # Source: lmms_eval/models/simple/qwen3_vl.py, line 229
-message = [{"role": "system", "content": self.system_prompt}]
+message = [\{"role": "system", "content": self.system_prompt\}]
 ```
 
 ### Task-Level Prompts
@@ -111,10 +111,10 @@ def mmmu_doc_to_text_qwen3vl(doc, lmms_eval_specific_kwargs=None):
     question_type = doc["question_type"]
 
     if question_type == "multiple-choice":
-        prompt = f"{pre_prompt}{question}\nOptions:\n{options}\n{post_prompt}"
+        prompt = f"\{pre_prompt\}\{question\}\nOptions:\n\{options\}\n\{post_prompt\}"
     else:
         # open ended question
-        prompt = f"{pre_prompt}{question}\nOptions:\n{options}\n{open_ended_prompt}"
+        prompt = f"\{pre_prompt\}\{question\}\nOptions:\n\{options\}\n\{open_ended_prompt\}"
 ```
 
 Note: For the Qwen3-VL format, **even open-ended questions include the options list** and use the prompt `"Please select the correct answer from the options above."` This effectively converts open-ended questions into multiple-choice format for Qwen3-VL. This is a deliberate design choice from the Qwen3-VL technical report.
@@ -151,12 +151,12 @@ The model class also sets:
 
 ```python
 # Source: lmms_eval/models/simple/qwen3_vl.py, lines 332-337
-default_gen_kwargs = {
+default_gen_kwargs = \{
     "max_new_tokens": 128,
     "temperature": 0.0,   # greedy decoding
     "top_p": None,
     "num_beams": 1,
-}
+\}
 ```
 
 ---
@@ -179,19 +179,19 @@ def parse_mmmu_multi_choice_response(response, all_choices, index2ans):
     # Step 2: Hierarchical pattern matching
     # Priority 1: Match (A) format
     for choice in all_choices:
-        if f"({choice})" in response:
+        if f"(\{choice\})" in response:
             candidates.append(choice)
 
     # Priority 2: Match "A " format (letter + space)
     if len(candidates) == 0:
         for choice in all_choices:
-            if f"{choice} " in response:
+            if f"\{choice\} " in response:
                 candidates.append(choice)
 
     # Priority 3: Match "A." format (letter + period)
     if len(candidates) == 0:
         for choice in all_choices:
-            if f"{choice}." in response:
+            if f"\{choice\}." in response:
                 candidates.append(choice)
 
     # Priority 4: Option text matching (only if response > 5 words)
@@ -222,7 +222,7 @@ Source: [`vlmeval/utils/matching_util.py`](https://github.com/open-compass/VLMEv
 ```python
 def can_infer_option(answer, choices):
     # Step 1: Replace punctuation with spaces
-    chars = '.()[],:;!*#{}'
+    chars = '.()[],:;!*#\{\}'
     for c in chars:
         answer_mod = answer_mod.replace(c, ' ')
     splits = [x.strip() for x in answer_mod.split()]

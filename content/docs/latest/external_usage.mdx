@@ -175,8 +175,8 @@ Every task carries its full YAML config as a `TaskConfig` dataclass:
 cfg = task.config
 cfg.test_split             # "test"
 cfg.output_type            # "generate_until"
-cfg.metric_list            # [{"metric": "mme_perception_score", ...}, ...]
-cfg.generation_kwargs      # {"max_new_tokens": 16, "temperature": 0, ...}
+cfg.metric_list            # [\{"metric": "mme_perception_score", ...\}, ...]
+cfg.generation_kwargs      # \{"max_new_tokens": 16, "temperature": 0, ...\}
 cfg.lmms_eval_specific_kwargs  # per-model prompt variants
 ```
 You can also read a raw YAML config without instantiating the task (and
@@ -203,7 +203,7 @@ See the [Task Guide](../guides/task_guide.md) for the full specification.
 ```python
 from lmms_eval.evaluator import simple_evaluate
     model="qwen2_5_vl",
-    model_args={"pretrained": "Qwen/Qwen2.5-VL-3B-Instruct"},
+    model_args=\{"pretrained": "Qwen/Qwen2.5-VL-3B-Instruct"\},
     tasks=["mme"],
     batch_size=1,
     limit=8,           # set to None for full evaluation
@@ -241,7 +241,7 @@ client = EvalClient("http://eval-server:8000")
 job = client.evaluate(
     model="qwen2_5_vl",
     tasks=["mme", "mmmu_val"],
-    model_args={"pretrained": "Qwen/Qwen2.5-VL-7B-Instruct"},
+    model_args=\{"pretrained": "Qwen/Qwen2.5-VL-7B-Instruct"\},
 )
 # Poll or wait for results
 result = client.wait_for_job(job["job_id"])
@@ -276,7 +276,7 @@ server API documentation.
 ```
 TaskManager()
   └─ initialize_tasks()        # scan lmms_eval/tasks/**/*.yaml
-       └─ index: {name -> yaml_path, type}
+       └─ index: \{name -> yaml_path, type\}
   └─ TaskManager.load_task_or_group()
        └─ ConfigurableTask(config)
             └─ download()              # datasets.load_dataset("lmms-lab/MME")

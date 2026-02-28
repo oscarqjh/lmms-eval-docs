@@ -329,7 +329,7 @@ Position lmms-eval as the "test suite for model quality":
 - name: Evaluate model quality
   uses: lmms-lab/lmms-eval-action@v1
   with:
-    model: ${{ steps.train.outputs.model_path }}
+    model: $\{\{ steps.train.outputs.model_path \}\}
     tasks: mmmu,mme,ai2d
     threshold: "mmmu>=0.60,mme>=1800"
 ```

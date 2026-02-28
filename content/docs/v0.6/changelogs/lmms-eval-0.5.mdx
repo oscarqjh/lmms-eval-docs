@@ -54,8 +54,8 @@ python -m lmms_eval \
 ```
 
 **Cache Location:**
-- Default: `~/.cache/lmms-eval/eval_cache/\<model_hash\>/{task_name}_rank{rank}_world_size{world_size}.jsonl`
-- Each line: `{"doc_id": \<doc_id\>, "response": \<string\>}`
+- Default: `~/.cache/lmms-eval/eval_cache/\<model_hash\>/\{task_name\}_rank\{rank\}_world_size\{world_size\}.jsonl`
+- Each line: `\{"doc_id": \<doc_id\>, "response": \<string\>\}`
 
 **API Integration:**
 ```python
@@ -306,7 +306,7 @@ results = simple_evaluate(
     device="cuda"
 )
 
-print(f"Results: {results['results']}")
+print(f"Results: \{results['results']\}")
 ```
 
 ## Technical Details
@@ -347,13 +347,13 @@ print(f"Results: {results['results']}")
 
 **Message Format:**
 ```python
-{
+\{
     "role": "user",
     "content": [
-        {"type": "audio", "url": "path/to/audio.wav"},
-        {"type": "text", "text": "Question about the audio"}
+        \{"type": "audio", "url": "path/to/audio.wav"\},
+        \{"type": "text", "text": "Question about the audio"\}
     ]
-}
+\}
 ```
 
 ### Model Context Protocol
@@ -503,13 +503,13 @@ Follow the pattern in existing audio tasks:
 ```python
 # In tasks/your_audio_task/utils.py
 def doc_to_messages(doc):
-    return [{
+    return [\{
         "role": "user",
         "content": [
-            {"type": "audio", "url": doc["audio_path"]},
-            {"type": "text", "text": doc["question"]}
+            \{"type": "audio", "url": doc["audio_path"]\},
+            \{"type": "text", "text": doc["question"]\}
         ]
-    }]
+    \}]
 ```
 
 See `lmms_eval/tasks/step2_audio_paralinguistic/` and `lmms_eval/tasks/voicebench/` for examples.

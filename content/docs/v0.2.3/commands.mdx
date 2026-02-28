@@ -35,7 +35,7 @@ This mode supports a number of command-line arguments, the details of which can 
 
 - `--limit` : Accepts an integer, or a float between 0.0 and 1.0 . If passed, will limit the number of documents to evaluate to the first X documents (if an integer) per task or first X% of documents per task. Useful for debugging, especially on costly API models.
 
-- `--use_cache` : Should be a path where a sqlite db file can be written to. Takes a string of format `/path/to/sqlite_cache_` in order to create a cache db at `/path/to/sqlite_cache_rank{i}.db` for each process (0-NUM_GPUS). This allows results of prior runs to be cached, so that there is no need to re-run results in order to re-score or re-run a given (model, task) pair again.
+- `--use_cache` : Should be a path where a sqlite db file can be written to. Takes a string of format `/path/to/sqlite_cache_` in order to create a cache db at `/path/to/sqlite_cache_rank\{i\}.db` for each process (0-NUM_GPUS). This allows results of prior runs to be cached, so that there is no need to re-run results in order to re-score or re-run a given (model, task) pair again.
 
 - `--cache_requests` : Can be "true", "refresh", or "delete". "true" means that the cache should be used. "refresh" means that you wish to regenerate the cache, which you should run if you change your dataset configuration for a given task. "delete" will delete the cache. Cached files are stored under lm_eval/cache/.cache unless you specify a different path via the environment variable: `LM_HARNESS_CACHE_PATH`. e.g. `LM_HARNESS_CACHE_PATH=~/Documents/cache_for_lm_harness`.
 
@@ -145,10 +145,10 @@ task_dict = lmms_eval.tasks.get_task_dict(
     [
         "mmlu", # A stock task
         "my_custom_task", # A custom task
-        {
+        \{
             "task": ..., # A dict that configures a task
             "doc_to_text": ...,
-            },
+            \},
         MyTask1 # A task object from `lm_eval.task.Task`
         ],
     task_manager # A task manager that allows lm_eval to
@@ -187,7 +187,7 @@ TASK=$2
 MODALITY=$3
 TP_SIZE=$4
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 python3 -m lmms_eval \
@@ -236,7 +236,7 @@ TASK=$2
 MODALITY=$3
 TP_SIZE=$4
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 python3 -m lmms_eval \

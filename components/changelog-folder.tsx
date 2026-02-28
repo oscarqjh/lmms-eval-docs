@@ -11,7 +11,7 @@ import {
 } from "fumadocs-ui/components/layout/sidebar";
 import { FiChevronsDown, FiChevronsUp } from "react-icons/fi";
 
-const CHANGELOG_FOLDER_NAME = "Changelogs";
+const CHANGELOG_FOLDER_NAME = "Releases";
 const DEFAULT_VISIBLE = 1;
 
 /**
@@ -67,7 +67,7 @@ function ChangelogSection({ children }: { children: ReactNode }) {
 
   return (
     <div className="mt-6">
-      <SidebarSeparator>Changelogs</SidebarSeparator>
+      <SidebarSeparator>Releases</SidebarSeparator>
       {visibleChildren}
       {hasMore && (
         <button

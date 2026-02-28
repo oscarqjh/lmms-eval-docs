@@ -189,7 +189,7 @@ async function downloadFile(url: string, token?: string): Promise<string> {
  */
 function extractTitle(filename: string): string {
   if (filename.toLowerCase() === "readme.md") {
-    return "Index";
+    return "Introduction";
   }
 
   return filename
@@ -310,12 +310,41 @@ function addImageDimensions(content: string): string {
 }
 
 /**
+ * Escape curly-brace expressions outside code blocks and inline code.
+ * MDX treats {expr} as JSX expressions, which breaks content like ${VAR}.
+ * Also strips bracket annotations from code fences (e.g. ```yaml [file.yaml] → ```yaml).
+ */
+function escapeCurlyBraces(content: string): string {
+  const lines = content.split("\n");
+  let inCodeBlock = false;
+
+  return lines
+    .map((line) => {
+      if (line.trim().startsWith("```")) {
+        inCodeBlock = !inCodeBlock;
+        if (inCodeBlock) {
+          // Strip bracket annotations from code fence opening
+          // e.g. ```yaml [configs/example.yaml] → ```yaml
+          return line.replace(/^(\s*```\w*)\s*\[.*\]/, "$1");
+        }
+        return line;
+      }
+      // Escape all { } on every line (both inside and outside code blocks).
+      // MDX/acorn parses ${} as template literals even inside fenced code blocks.
+      // Escaped \{ \} render correctly in both prose and code.
+      return line.replace(/\{/g, "\\{").replace(/\}/g, "\\}");
+    })
+    .join("\n");
+}
+
+/**
  * Convert markdown to MDX with frontmatter.
  */
 function convertToMDX(content: string, metadata: DocMetadata): string {
   let processedContent = escapeHtmlTags(content);
   processedContent = escapeMathFormulas(processedContent);
   processedContent = addImageDimensions(processedContent);
+  processedContent = escapeCurlyBraces(processedContent);
 
   const frontmatter = `---
 title: ${escapeYamlValue(metadata.title)}
@@ -335,8 +364,8 @@ description: ""
  * Hardcoded sidebar sections.
  *
  * Edit this list to reorganise the sidebar. Pages not listed in any section
- * are placed under the catch-all "Guides" section. Changelog files
- * (matching CHANGELOG_PATTERN) are always placed in the "Changelogs" folder.
+ * are placed under the catch-all "Guides" section. Release files
+ * (matching RELEASES_PATTERN) are always placed in the "Releases" folder.
  *
  * When the upstream repo organises docs into subfolders (e.g. docs/getting_started/),
  * the script auto-detects them and creates sections from the folder name,
@@ -352,30 +381,16 @@ interface SectionConfig {
 const SECTIONS: SectionConfig[] = [
   {
     name: "Getting Started",
-    pages: ["index", "quickstart"],
-  },
-  {
-    name: "Guides",
-    pages: [
-      "model_guide",
-      "task_guide",
-      "run_examples",
-      "commands",
-      "caching",
-      "throughput_metrics",
-    ],
-  },
-  {
-    name: "References",
-    pages: [
-      "current_tasks",
-      "mmmu-eval-discrepancy",
-    ],
+    pages: ["introduction", "quickstart", "commands", "run_examples"],
   },
 ];
 
-/** Pattern for changelog files: lmms-eval-0.3, lmms-eval-0.4, etc. */
-const CHANGELOG_PATTERN = /^lmms-eval-[\d.]+$/;
+/** Pattern for release/changelog files: changelog, lmms-eval-0.3, etc. */
+const RELEASES_PATTERN = /^(changelog|lmms-eval-[\d.]+)$/;
+
+/** Preferred display order for sidebar sections (auto-detected or hardcoded).
+ *  Sections not listed here appear after in alphabetical order. */
+const SECTION_ORDER = ["Getting Started", "Guides", "Advanced", "References", "Roadmap"];
 
 /** Upstream subfolders to skip (not synced as sections). */
 const EXCLUDED_FOLDERS = new Set(["images", "i18n", ".github"]);
@@ -399,7 +414,7 @@ function folderNameToTitle(name: string): string {
  *
  * Uses SECTIONS config to assign pages to named sections.
  * Pages not in any section go into "Guides".
- * Changelog files always go into the "changelogs" subfolder.
+ * Release files always go into the "releases" subfolder.
  *
  * @param folderSections  Sections auto-detected from upstream subfolders
  *                        (empty when the upstream repo is flat).
@@ -410,8 +425,8 @@ function createMetaJson(
   folderSections: { name: string; pages: string[] }[],
 ): object {
   const allSlugs = new Set(docs.map((d) => d.slug));
-  const changelogSlugs = docs
-    .filter((d) => CHANGELOG_PATTERN.test(d.slug))
+  const releaseSlugs = docs
+    .filter((d) => RELEASES_PATTERN.test(d.slug))
     .map((d) => d.slug);
   const placed = new Set<string>();
 
@@ -420,7 +435,7 @@ function createMetaJson(
   // 1. Hardcoded sections — only include pages that actually exist
   for (const section of SECTIONS) {
     const existing = section.pages.filter(
-      (p) => allSlugs.has(p) && !CHANGELOG_PATTERN.test(p),
+      (p) => allSlugs.has(p) && !RELEASES_PATTERN.test(p),
     );
     if (existing.length === 0) continue;
     pages.push(`---${section.name}---`);
@@ -431,9 +446,19 @@ function createMetaJson(
   }
 
   // 2. Auto-detected folder sections (from upstream subfolders)
+  //    Sorted by SECTION_ORDER preference, then alphabetically.
   //    If a SECTIONS entry matches the folder name, use its page order.
-  //    Pages from the folder not listed in SECTIONS are appended after.
-  for (const fs of folderSections) {
+  //    Pages already placed by step 1 are skipped to avoid duplicates.
+  const sortedFolderSections = [...folderSections].sort((a, b) => {
+    const ai = SECTION_ORDER.findIndex((s) => s.toLowerCase() === a.name.toLowerCase());
+    const bi = SECTION_ORDER.findIndex((s) => s.toLowerCase() === b.name.toLowerCase());
+    const ao = ai === -1 ? SECTION_ORDER.length : ai;
+    const bo = bi === -1 ? SECTION_ORDER.length : bi;
+    if (ao !== bo) return ao - bo;
+    return a.name.localeCompare(b.name);
+  });
+
+  for (const fs of sortedFolderSections) {
     if (fs.pages.length === 0) continue;
 
     // Check if a hardcoded section matches this folder's display name
@@ -452,18 +477,22 @@ function createMetaJson(
       ordered = fs.pages;
     }
 
+    // Filter out pages already placed by hardcoded sections
+    const remaining = ordered.filter((p) => !placed.has(p));
+    if (remaining.length === 0) continue;
+
     pages.push(`---${fs.name}---`);
-    for (const p of ordered) {
+    for (const p of remaining) {
       pages.push(p);
       placed.add(p);
     }
   }
 
-  // 3. Catch-all: any remaining non-changelog pages go under "Others"
+  // 3. Catch-all: any remaining non-release pages go under "Others"
   const remaining = docs
     .filter(
       (d) =>
-        !placed.has(d.slug) && !CHANGELOG_PATTERN.test(d.slug),
+        !placed.has(d.slug) && !RELEASES_PATTERN.test(d.slug),
     )
     .map((d) => d.slug);
   if (remaining.length > 0) {
@@ -474,8 +503,8 @@ function createMetaJson(
   }
 
   // 4. Changelogs folder (rendered by custom sidebar component)
-  if (changelogSlugs.length > 0) {
-    pages.push("changelogs");
+  if (releaseSlugs.length > 0) {
+    pages.push("releases");
   }
 
   return {
@@ -489,15 +518,15 @@ function createMetaJson(
 /**
  * Create meta.json for the changelogs subfolder.
  */
-function createChangelogsMetaJson(changelogSlugs: string[]): object {
-  const sorted = [...changelogSlugs].sort((a, b) => {
+function createReleasesMetaJson(releaseSlugs: string[]): object {
+  const sorted = [...releaseSlugs].sort((a, b) => {
     const va = a.replace("lmms-eval-", "");
     const vb = b.replace("lmms-eval-", "");
     return parseFloat(vb) - parseFloat(va);
   });
 
   return {
-    title: "Changelogs",
+    title: "Releases",
     defaultOpen: false,
     pages: sorted,
   };
@@ -536,7 +565,7 @@ async function syncDocsForVersion(
   console.log(`    Found ${mdFiles.length} markdown files, ${subDirs.length} subfolders`);
 
   const docMetadata: DocMetadata[] = [];
-  const changelogSlugs: string[] = [];
+  const releaseSlugs: string[] = [];
   const folderSections: { name: string; pages: string[] }[] = [];
 
   // --- Process top-level markdown files ---
@@ -548,7 +577,7 @@ async function syncDocsForVersion(
 
     const slug =
       file.name.toLowerCase() === "readme.md"
-        ? "index"
+        ? "introduction"
         : file.name.replace(/\.mdx?$/, "").toLowerCase();
     const title = extractTitle(file.name);
     const description = "";
@@ -557,13 +586,13 @@ async function syncDocsForVersion(
 
     const mdxContent = convertToMDX(content, { title, description, slug });
 
-    // Changelog files go into a changelogs/ subfolder
-    if (CHANGELOG_PATTERN.test(slug)) {
-      const changelogsDir = path.join(targetDir, "changelogs");
-      await fs.mkdir(changelogsDir, { recursive: true });
-      const targetPath = path.join(changelogsDir, `${slug}.mdx`);
+    // Release files go into a releases/ subfolder
+    if (RELEASES_PATTERN.test(slug)) {
+      const releasesDir = path.join(targetDir, "releases");
+      await fs.mkdir(releasesDir, { recursive: true });
+      const targetPath = path.join(releasesDir, `${slug}.mdx`);
       await fs.writeFile(targetPath, mdxContent, "utf-8");
-      changelogSlugs.push(slug);
+      releaseSlugs.push(slug);
     } else {
       const targetPath = path.join(targetDir, `${slug}.mdx`);
       await fs.writeFile(targetPath, mdxContent, "utf-8");
@@ -573,12 +602,12 @@ async function syncDocsForVersion(
   // --- Process subfolders (auto-detected sections) ---
   // Most subfolders: files are written flat alongside top-level files and
   // listed under a separator heading.
-  // Special case: a "changelogs" folder is kept as a local subfolder so the
+  // Special case: a "releases" folder is kept as a local subfolder so the
   // custom sidebar component (show 2 + expand) works.
   for (const dir of subDirs) {
     const folderName = dir.name;
     const sectionTitle = folderNameToTitle(folderName);
-    const isChangelogsFolder = folderName.toLowerCase() === "changelogs";
+    const isReleasesFolder = folderName.toLowerCase() === "releases";
     console.log(`    Processing folder: ${folderName}/ -> "${sectionTitle}"`);
 
     const folderFiles = await fetchGitHubFiles(token, version.ref, folderName);
@@ -598,20 +627,23 @@ async function syncDocsForVersion(
 
       const slug =
         file.name.toLowerCase() === "readme.md"
-          ? "index"
+          ? "introduction"
           : file.name.replace(/\.mdx?$/, "").toLowerCase();
       const title = extractTitle(file.name);
       const description = "";
 
       const mdxContent = convertToMDX(content, { title, description, slug });
 
-      if (isChangelogsFolder) {
-        // Write into local changelogs/ subfolder (Fumadocs folder for custom component)
-        const changelogsDir = path.join(targetDir, "changelogs");
-        await fs.mkdir(changelogsDir, { recursive: true });
-        const targetPath = path.join(changelogsDir, `${slug}.mdx`);
+      // Always track metadata so createMetaJson can see all pages
+      docMetadata.push({ title, description, slug });
+
+      if (isReleasesFolder) {
+        // Write into local releases/ subfolder (Fumadocs folder for custom component)
+        const releasesDir = path.join(targetDir, "releases");
+        await fs.mkdir(releasesDir, { recursive: true });
+        const targetPath = path.join(releasesDir, `${slug}.mdx`);
         await fs.writeFile(targetPath, mdxContent, "utf-8");
-        changelogSlugs.push(slug);
+        releaseSlugs.push(slug);
       } else {
         // Write flat to the top-level version directory
         const targetPath = path.join(targetDir, `${slug}.mdx`);
@@ -620,7 +652,7 @@ async function syncDocsForVersion(
       }
     }
 
-    if (!isChangelogsFolder) {
+    if (!isReleasesFolder) {
       folderSections.push({ name: sectionTitle, pages: folderPageSlugs });
     }
   }
@@ -631,12 +663,12 @@ async function syncDocsForVersion(
   await fs.writeFile(metaPath, JSON.stringify(metaJson, null, 2), "utf-8");
 
   // Write changelogs/meta.json if there are changelog files
-  if (changelogSlugs.length > 0) {
-    const changelogsMetaJson = createChangelogsMetaJson(changelogSlugs);
-    const changelogsMetaPath = path.join(targetDir, "changelogs", "meta.json");
+  if (releaseSlugs.length > 0) {
+    const releasesMetaJson = createReleasesMetaJson(releaseSlugs);
+    const releasesMetaPath = path.join(targetDir, "releases", "meta.json");
     await fs.writeFile(
-      changelogsMetaPath,
-      JSON.stringify(changelogsMetaJson, null, 2),
+      releasesMetaPath,
+      JSON.stringify(releasesMetaJson, null, 2),
       "utf-8",
     );
   }

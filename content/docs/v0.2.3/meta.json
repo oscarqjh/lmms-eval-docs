@@ -4,13 +4,12 @@
   "root": true,
   "pages": [
     "---Getting Started---",
-    "index",
-    "---Guides---",
-    "model_guide",
-    "task_guide",
-    "run_examples",
+    "introduction",
     "commands",
-    "---References---",
-    "current_tasks"
+    "run_examples",
+    "---Others---",
+    "current_tasks",
+    "model_guide",
+    "task_guide"
   ]
 }

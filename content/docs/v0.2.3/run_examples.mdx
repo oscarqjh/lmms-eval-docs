@@ -50,7 +50,7 @@ CKPT_PATH=$2
 CONV_TEMPLATE=$3
 MODEL_NAME=$4
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 #mmbench_en_dev,mathvista_testmini,llava_in_the_wild,mmvet
@@ -77,7 +77,7 @@ python3 -m pip install transformers --upgrade;
 
 TASK=$1
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 accelerate launch --num_processes 8 --main_process_port 12345 -m lmms_eval \
@@ -104,7 +104,7 @@ python3 -m pip install torchvision einops timm sentencepiece;
 TASK=$1
 CKPT_PATH=$2
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 accelerate launch --num_processes 8 --main_process_port 12380 -m lmms_eval \
@@ -133,7 +133,7 @@ python3 -m pip install flash-attn==2.3.6 --no-build-isolation;
 
 TASK=$1
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 accelerate launch --num_processes 8 --main_process_port 12345 -m lmms_eval \
@@ -162,7 +162,7 @@ python3 -m pip install torchvision einops timm sentencepiece;
 TASK=$1
 MODALITY=$2
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 # For Xcomposer2d5
@@ -198,7 +198,7 @@ python3 -m pip install transformers --upgrade;
 CKPT_PATH=$1
 TASK=$2
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 accelerate launch --num_processes 8 --main_process_port 12345 -m lmms_eval \
@@ -233,7 +233,7 @@ TASK=$2
 MODALITY=$3
 TP_SIZE=$4
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 python3 -m lmms_eval \
@@ -263,7 +263,7 @@ TASK=$1
 MODEL_VERSION=$2
 MODALITIES=$3
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 accelerate launch --num_processes 8 --main_process_port 30000 -m lmms_eval \
@@ -290,7 +290,7 @@ TASK=$1
 MODEL_VERSION=$2
 MODALITIES=$3
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 accelerate launch --num_processes 8 --main_process_port 12345 -m lmms_eval \
@@ -324,7 +324,7 @@ TASK=$1
 CKPT_PATH=$2
 CONV_TEMPLATE=$3
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 accelerate launch --num_processes 8 --main_process_port 12345 -m lmms_eval \
@@ -354,7 +354,7 @@ python3 -m pip install av sentencepiece;
 
 TASK=$1
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 accelerate launch --num_processes 8 --main_process_port 12345 -m lmms_eval \
@@ -378,7 +378,7 @@ python3 -m pip install av sentencepiece;
 
 TASK=$1
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 accelerate launch --num_processes 8 --main_process_port 12345 -m lmms_eval \
@@ -404,7 +404,7 @@ python3 -m pip install av sentencepiece protobuf==3.20 transformers==4.28.1 eino
 
 TASK=$1
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 accelerate launch --num_processes 8 --main_process_port 12345 -m lmms_eval \
@@ -428,7 +428,7 @@ python3 -m pip install sentencepiece av;
 
 TASK=$1
 echo $TASK
-TASK_SUFFIX="${TASK//,/_}"
+TASK_SUFFIX="$\{TASK//,/_\}"
 echo $TASK_SUFFIX
 
 accelerate launch --num_processes 8 --main_process_port 12345 -m lmms_eval \

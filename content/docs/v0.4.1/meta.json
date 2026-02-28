@@ -4,16 +4,15 @@
   "root": true,
   "pages": [
     "---Getting Started---",
-    "index",
-    "---Guides---",
+    "introduction",
+    "commands",
+    "run_examples",
+    "---Others---",
+    "caching",
+    "current_tasks",
     "model_guide",
     "task_guide",
-    "run_examples",
-    "commands",
-    "caching",
     "throughput_metrics",
-    "---References---",
-    "current_tasks",
-    "changelogs"
+    "releases"
   ]
 }

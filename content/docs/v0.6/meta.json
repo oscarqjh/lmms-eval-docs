@@ -4,19 +4,18 @@
   "root": true,
   "pages": [
     "---Getting Started---",
-    "index",
+    "introduction",
     "quickstart",
-    "---Guides---",
-    "model_guide",
-    "task_guide",
-    "run_examples",
     "commands",
-    "caching",
-    "throughput_metrics",
-    "---References---",
-    "current_tasks",
+    "run_examples",
     "---Roadmap---",
     "02_business_marketing_roadmap",
-    "changelogs"
+    "---Others---",
+    "caching",
+    "current_tasks",
+    "model_guide",
+    "task_guide",
+    "throughput_metrics",
+    "releases"
   ]
 }

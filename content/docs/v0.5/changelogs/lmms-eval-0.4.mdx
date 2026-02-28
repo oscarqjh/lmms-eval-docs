@@ -85,27 +85,27 @@ def doc_to_messages(doc):
     messages = []
     
     # Add system message if needed
-    # messages.append({
+    # messages.append(\{
     #     "role": "system",
     #     "content": [
-    #         {"type": "text", "text" : "You are a helpful AI assistant."}
+    #         \{"type": "text", "text" : "You are a helpful AI assistant."\}
     #     ]
-    # })
+    # \})
     
     # Add user message with multimodal content
     user_content = []
     if "image" in doc:
-        user_content.append({"type": "image", "url": doc["image"]})
+        user_content.append(\{"type": "image", "url": doc["image"]\})
     if "video" in doc:
-        user_content.append({"type": "video", "url": doc["video"]})
+        user_content.append(\{"type": "video", "url": doc["video"]\})
     if "audio" in doc:
-        user_content.append({"type": "audio", "url": doc["audio"]})
-    user_content.append({"type": "text", "text": doc["question"]})
+        user_content.append(\{"type": "audio", "url": doc["audio"]\})
+    user_content.append(\{"type": "text", "text": doc["question"]\})
     
-    messages.append({
+    messages.append(\{
         "role": "user",
         "content": user_content
-    })
+    \})
     
     return messages
 ```
@@ -125,7 +125,7 @@ To utilize `doc_to_messages`, we provide a protocol class that allows you to con
 
 ```python
 chat_messages = doc_to_messages(self.task_dict[task][split][doc_id])
-chat_messages: ChatMessages = ChatMessages(**{"messages": chat_messages})
+chat_messages: ChatMessages = ChatMessages(**\{"messages": chat_messages\})
 
 # To openai messages
 messages = chat_messages.to_openai_messages()
@@ -156,11 +156,11 @@ To implement a new chat model, follow these steps:
 Support for large-scale evaluations across multiple machines using PyTorch's distributed capabilities:
 
 ```bash
-torchrun --nproc_per_node="${MLP_WORKER_GPU}" \
-         --nnodes="${MLP_WORKER_NUM}" \
-         --node_rank="${MLP_ROLE_INDEX}" \
-         --master_addr="${MLP_WORKER_0_HOST}" \
-         --master_port="${MLP_WORKER_0_PORT}" \
+torchrun --nproc_per_node="$\{MLP_WORKER_GPU\}" \
+         --nnodes="$\{MLP_WORKER_NUM\}" \
+         --node_rank="$\{MLP_ROLE_INDEX\}" \
+         --master_addr="$\{MLP_WORKER_0_HOST\}" \
+         --master_port="$\{MLP_WORKER_0_PORT\}" \
          -m lmms_eval \
          --model qwen2_5_vl \
          --model_args pretrained=Qwen/Qwen2.5-VL-3B-Instruct,device_map=cuda \
@@ -202,10 +202,10 @@ config = ServerConfig(
     max_tokens=1024,
     judge_type="score",  # Options: 'general', 'binary', 'score', 'comparative'
     score_range=(0, 10),
-    evaluation_criteria={
+    evaluation_criteria=\{
         "accuracy": "How factually correct is the response?",
         "completeness": "Does the response fully address the question?"
-    }
+    \}
 )
 
 # Create evaluation request
@@ -270,7 +270,7 @@ def process_results_with_judge(doc, results):
         custom_prompt="Judge if the prediction is mathematically equivalent to the answer."
     )
     
-    return {"llm_as_judge_eval": 1 if result["success"] and result["result"] == "1" else 0}
+    return \{"llm_as_judge_eval": 1 if result["success"] and result["result"] == "1" else 0\}
 ```
 
 *Task YAML Configuration:*
@@ -337,23 +337,23 @@ results = simple_evaluate(
 )
 
 # Results structure:
-# {
-#     "results": {
-#         "mmstar": {
+# \{
+#     "results": \{
+#         "mmstar": \{
 #             "acc": 0.75,
 #             "acc_stderr": 0.02
-#         },
-#         "mme": {
+#         \},
+#         "mme": \{
 #             "mme_perception_score": 1245.5,
 #             "mme_cognition_score": 287.5
-#         },
-#         "mathvista_testmini": {
+#         \},
+#         "mathvista_testmini": \{
 #             "llm_as_judge_eval": 0.68
-#         }
-#     },
-#     "config": {...},
+#         \}
+#     \},
+#     "config": \{...\},
 #     "samples": [...] if log_samples=True
-# }
+# \}
 ```
 
 ### Advanced API with Custom Configuration
@@ -392,11 +392,11 @@ from lmms_eval.tasks import TaskManager, get_task_dict
 # List available tasks
 task_manager = TaskManager()
 all_tasks = task_manager.all_tasks
-print(f"Available tasks: {all_tasks}")
+print(f"Available tasks: \{all_tasks\}")
 
 # Get task groups  
 all_groups = task_manager.all_groups
-print(f"Task groups: {all_groups}")
+print(f"Task groups: \{all_groups\}")
 
 # Get task dictionary for evaluation
 task_dict = get_task_dict(
@@ -422,7 +422,7 @@ torch.cuda.set_device(local_rank)
 # Model with distributed support
 model = Qwen2_5_VL(
     pretrained="Qwen/Qwen2.5-VL-72B-Instruct",
-    device_map=f"cuda:{local_rank}"
+    device_map=f"cuda:\{local_rank\}"
 )
 
 # Distributed evaluation
@@ -430,12 +430,12 @@ results = simple_evaluate(
     model=model,
     tasks=["mmmu_val", "mathvista_testmini"],
     batch_size=4,
-    device=f"cuda:{local_rank}"
+    device=f"cuda:\{local_rank\}"
 )
 
 # Results are automatically aggregated across all processes
 if dist.get_rank() == 0:
-    print(f"Final results: {results}")
+    print(f"Final results: \{results\}")
 ```
 
 ### Judge API Integration
@@ -477,10 +477,10 @@ from lmms_eval.models.simple.qwen2_5_vl import Qwen2_5_VL
 
 # Efficient batch processing
 def batch_evaluate_models(models, tasks, batch_size=8):
-    results = {}
+    results = \{\}
     
     for model_name, model in models.items():
-        print(f"Evaluating {model_name}...")
+        print(f"Evaluating \{model_name\}...")
         
         model_results = simple_evaluate(
             model=model,
@@ -501,10 +501,10 @@ def batch_evaluate_models(models, tasks, batch_size=8):
     return results
 
 # Usage
-models = {
+models = \{
     "qwen2.5-vl-3b": Qwen2_5_VL(pretrained="Qwen/Qwen2.5-VL-3B-Instruct", device="cuda"),
     "qwen2.5-vl-7b": Qwen2_5_VL(pretrained="Qwen/Qwen2.5-VL-7B-Instruct", device="cuda")
-}
+\}
 
 benchmark_results = batch_evaluate_models(
     models=models,

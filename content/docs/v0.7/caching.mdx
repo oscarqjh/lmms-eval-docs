@@ -37,7 +37,7 @@ Non-deterministic requests always go to the model, are never stored, and never r
 Each cached response is keyed by:
 
 ```
-sha256({
+sha256(\{
     "v":   <schema_version>,        # auto-invalidates on schema upgrade
     "rt":  <request_type>,          # "generate_until" | "loglikelihood"
     "tn":  <task_name>,             # e.g. "mme"
@@ -46,7 +46,7 @@ sha256({
     "gk":  <canonicalized_gen_kwargs>,
     "ch":  <content_hash>,          # loglikelihood only: conditional vs unconditional
     "tf":  <task_fingerprint>       # sha256 of task YAML config
-})
+\})
 ```
 
 Only generation parameters that affect output are included in `gk`:
@@ -62,8 +62,8 @@ Float/int normalization: `temperature=0.0` and `temperature=0` produce the same 
 ### File layout
 
 ```
-{use_cache}/
-  {model_hash}/          # sha256("{model}|{model_args}")[:16]
+\{use_cache\}/
+  \{model_hash\}/          # sha256("\{model\}|\{model_args\}")[:16]
     rank0.db             # SQLite (WAL mode) - primary lookup
     rank0.jsonl          # write-ahead audit log - crash recovery
     rank1.db             # (if multi-GPU)
@@ -81,7 +81,7 @@ Per-rank files avoid write contention in distributed runs.
 | Change gen_kwargs (e.g. max_new_tokens) | Different `gk` in key |
 | Schema version bump | Different `v` in key |
 
-To force re-evaluation: delete the `{model_hash}/` directory under your cache path.
+To force re-evaluation: delete the `\{model_hash\}/` directory under your cache path.
 
 ### Crash recovery
 
@@ -164,11 +164,11 @@ Nothing else is required. When enabled, the model will:
 ### Where cache files live
 
 - Base directory: `$(LMMS_EVAL_HOME:-~/.cache/lmms-eval)/eval_cache/\<model_hash\>/`
-- File name per task and process shard: `{task_name}_rank{rank}_world_size{world_size}.jsonl`
+- File name per task and process shard: `\{task_name\}_rank\{rank\}_world_size\{world_size\}.jsonl`
 - Record format per line:
 
 ```json
-{"doc_id": <doc_id>, "response": <string>}
+\{"doc_id": <doc_id>, "response": <string>\}
 ```
 
 Notes:

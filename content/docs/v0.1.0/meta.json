@@ -4,10 +4,10 @@
   "root": true,
   "pages": [
     "---Getting Started---",
-    "index",
-    "---Guides---",
+    "introduction",
+    "commands",
+    "---Others---",
     "model_guide",
-    "task_guide",
-    "commands"
+    "task_guide"
   ]
 }
